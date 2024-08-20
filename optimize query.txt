@@ -1,0 +1,30 @@
+Bulk Operations
+
+	ეს ოპერაციები გამოიყენება იმისთვის რომ შევასრულოთ სხვადასხვა დატაბეისის ოპერაციები ერთ ქუერიში
+
+ 	მოკლედ იმისთვისაა რომ create, update, delete ამ მეთოდების ოპტიმიზაციისთვის
+
+
+bulk_create
+
+კარგია მაშინ როდესაც ვქმნით რამოდენიმე ობიექტს ერთად
+
+# List of Book objects to create
+books = [
+    Book(title="Book 1", author="Author 1"),
+    Book(title="Book 2", author="Author 2"),
+    Book(title="Book 3", author="Author 3"),
+]
+
+# Bulk create the list in one query
+Book.objects.bulk_create(books)
+
+bulk_update
+
+# Assuming we have a list of existing book objects
+books = Book.objects.filter(author="Author 1")
+for book in books:
+    book.title = "Updated Title"
+
+# Bulk update the title for all selected books
+Book.objects.bulk_update(books, ['title'])

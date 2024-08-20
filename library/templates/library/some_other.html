@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Item List</title>
+    <style>
+      .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+      }
+      .pagination li {
+        margin: 0 5px;
+      }
+      .pagination a {
+        text-decoration: none;
+        padding: 8px 12px;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+      }
+      .pagination a:hover {
+        background-color: #007bff;
+        color: white;
+      }
+      .pagination .active a {
+        background-color: #007bff;
+        color: white;
+      }
+      .pagination .disabled a {
+        color: #ccc;
+        border-color: #ccc;
+      }
+    </style>
+
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container mt-3">
+      <!-- Search Bar -->
+      <div class="search-container mb-4">
+        <h4>Search Books</h4>
+        <form
+          class="form-inline justify-content-center"
+          method="get"
+          action="{% url 'item-list' %}"
+        >
+          <input
+            class="form-control mr-sm-2"
+            type="search"
+            name="search"
+            value="{{ search_term }}"
+            placeholder="Search..."
+            aria-label="Search"
+          />
+          <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
+            Search
+          </button>
+        </form>
+      </div>
+
+      <h1>Items</h1>
+      <div class="row mb-3" style="row-gap: 1rem">
+        {% for item in items %}
+        <div class="col-md-4" style="min-height: 1px">
+          <div class="card h-100 mb-4 box-shadow">
+            <div class="card-body">
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-text">{{item.authors}}</p>
+            </div>
+
+            <div class="card-footer mt-auto">
+              <a href="{% url 'other' item.id %}" class="btn btn-primary"
+                >See Book</a
+              >
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li><a href="?page=1">&laquo; First</a></li>
+        <li>
+          <a href="?page={{ page_obj.previous_page_number }}"
+            >&lsaquo; Previous</a
+          >
+        </li>
+        {% else %}
+        <li class="disabled"><a href="#">&laquo; First</a></li>
+        <li class="disabled"><a href="#">&lsaquo; Previous</a></li>
+        {% endif %} {% for num in page_range %} {% if num == page_obj.number %}
+        <li class="active"><a href="#">{{ num }}</a></li>
+        {% else %}
+        <li><a href="?page={{ num }}">{{ num }}</a></li>
+        {% endif %} {% endfor %} {% if page_obj.has_next %}
+        <li>
+          <a href="?page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
+        </li>
+        <li><a href="?page={{ paginator.num_pages }}">Last &raquo;</a></li>
+        {% else %}
+        <li class="disabled"><a href="#">Next &rsaquo;</a></li>
+        <li class="disabled"><a href="#">Last &raquo;</a></li>
+        {% endif %}
+      </ul>
+      {% endif %}
+    </div>
+  </body>
+</html>
