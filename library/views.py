@@ -28,7 +28,7 @@ class Home(TemplateView):
         #     publisher="Test Publisher"
         # )
 
-        context['books'] = Book.objects.get(id=1)
+        context['books'] = Book.objects.get(id=231)
         return context
     
 from django.shortcuts import get_object_or_404

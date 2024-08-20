@@ -17,18 +17,24 @@ class BookView(generics.ListAPIView):
     serializer_class = BookSerializer
     pagination_class = StandardResultsSetPagination
 
+from django.contrib.postgres.search import TrigramSimilarity
+from django.contrib.postgres.search import SearchQuery, SearchRank, SearchVector
+from django.db.models import F, Q
+
+
 # and this is for searching
 class BookSearchView(generics.ListAPIView):
     serializer_class = BookSerializer
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
-        query = self.request.query_params.get('q', '')
-        if query:
-            search_query = SearchQuery(query)
-            queryset = Book.objects.filter(
-                title__search=search_query
-            ).order_by('-id').only('title', 'authors')
-            return queryset
-        return Book.objects.none()
+        queryset = Book.objects.all()
+        search_query = self.request.query_params.get('q', '')
+
+        if search_query:
+            search_query_obj = SearchQuery(search_query, config='english')
+            
+            queryset = queryset.filter(search_vector=search_query_obj).order_by('-average_rating')
+
+        return queryset
 
