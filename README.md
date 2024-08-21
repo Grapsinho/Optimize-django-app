@@ -13,13 +13,13 @@ Welcome to the Django Optimization Project! This project focuses on enhancing th
 1. **Clone the Repository:**
 
 ```bash
-cd [repository name]
+git clone https://github.com/Grapsinho/Optimize-django-app.git
 ```
 
 2. Navigate to the project directory:
 
 ```bash
-cd django-chat-app
+cd Optimize-django-app
 ```
 
 3. Create a virtual environment:
